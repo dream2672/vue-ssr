@@ -15,7 +15,7 @@ export default context => {
       const matchedComponents = router.getMatchedComponents()
       // 匹配不到的路由，执行 reject 函数，并返回 404
       if (!matchedComponents.length) {
-        return reject(new Error('no components matched'))
+        return reject({ code: 404, url: context.url})
       }
       resolve(app)
     }, reject)

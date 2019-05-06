@@ -17,18 +17,18 @@ serverCompiler.outputFileSystem = mfs
 
 // 3、监听文件修改，实时编译获取最新的 vue-ssr-server-bundle.json
 let bundle
-serverCompiler.watch({}, (err, stats) =>{
+serverCompiler.watch({}, (err, stats) => {
   if (err) {
     throw err
   }
   stats = stats.toJson()
-  stats.errors.forEach(error => console.error(error) )
-  stats.warnings.forEach( warn => console.warn(warn) )
+  stats.errors.forEach(error => console.error(error))
+  stats.warnings.forEach(warn => console.warn(warn))
   const bundlePath = path.join(
     webpackConfig.output.path,
     'vue-ssr-server-bundle.json'
   )
-  bundle = JSON.parse(mfs.readFileSync(bundlePath,'utf-8'))
+  bundle = JSON.parse(mfs.readFileSync(bundlePath, 'utf-8'))
   console.log('new bundle generated')
 })
 
@@ -38,10 +38,12 @@ const handleRequest = async ctx => {
     return
   }
   const url = ctx.path
-  if (url.includes('favicon.ico')){
-    console.log(`proxy ${url}`)
+  if (url.includes('favicon.ico')) {
     return await send(ctx, url, { root: path.resolve(__dirname, '../public') })
-  }
+  } 
+  // else if (url.includes('/sockjs-node')) {
+  //   return ctx.body = { "websocket": true, "origins": ["*:*"], "cookie_needed": false, "entropy": 819598444 }
+  // }
 
   // 4、获取最新的 vue-ssr-client-manifest.json
   const clientManifestResp = await axios.get('http://localhost:8080/vue-ssr-client-manifest.json')
@@ -56,10 +58,11 @@ const handleRequest = async ctx => {
     title: "ssr test",
     url: ctx.url
   };
-  const html = await renderToString(context,renderer)
+  const html = await renderToString(context, renderer)
   ctx.body = html;
 }
-function renderToString(context,renderer) {
+
+function renderToString(context, renderer) {
   return new Promise((resolve, reject) => {
     renderer.renderToString(context, (err, html) => {
       err ? reject(err) : resolve(html);
