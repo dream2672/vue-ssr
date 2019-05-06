@@ -6,8 +6,8 @@ export default context => {
   // 就已经准备就绪。
   return new Promise((resolve, reject) => {
     const { app } = createApp(context)
-
-    if (context.url == '/') {
+    
+    if (context.url === '/') {
       resolve(app)
     } else {
       reject({ code: 404, url: context.url })

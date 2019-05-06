@@ -10,5 +10,5 @@ export function createApp () {
     store,
     render: h => h(App)
   })
-  return { app }
+  return { app, store }
 }

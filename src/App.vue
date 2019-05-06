@@ -5,6 +5,8 @@
 </template>
 <script>
 export default {
-  
+  asyncData () {
+    console.log(11)
+  }
 }
 </script>
