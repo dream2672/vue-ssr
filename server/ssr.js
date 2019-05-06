@@ -13,7 +13,7 @@ app.use(router.routes()).use(router.allowedMethods())
 app.use(koaStatic(resolve("../dist")));
 app.use(koaStatic(resolve("../public")));
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3200;
 
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}`);

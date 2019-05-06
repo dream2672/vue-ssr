@@ -6,18 +6,23 @@ const merge = require('lodash.merge')
 const TARGET_NODE = process.env.WEBPACK_TARGET === 'node'
 const isDev = process.env.NODE_ENV !== 'production'
 
-const createApiFile = TARGET_NODE 
+const host = '0.0.0.0'
+const port = '3300'
+
+const createApiFile = TARGET_NODE
   ? './create-api-server.js'
   : './create-api-client.js'
 
-const target = TARGET_NODE 
-  ? 'server' 
+const target = TARGET_NODE
+  ? 'server'
   : 'client'
 
 module.exports = {
-  publicPath: isDev ? 'http://localhost:8080' : '',
+  publicPath: isDev ? `http://${host}:${port}` : '',
   devServer: {
-    historyApiFallback:true,
+    historyApiFallback: true,
+    host,
+    port,
     headers: {
       'Access-Control-Allow-Origin': '*'
     }
@@ -30,7 +35,7 @@ module.exports = {
     target: TARGET_NODE ? 'node' : 'web',
     node: TARGET_NODE ? undefined : false,
     plugins: [
-      TARGET_NODE 
+      TARGET_NODE
         ? new VueSSRServerPlugin()
         : new VueSSRClientPlugin()
     ],
@@ -38,14 +43,14 @@ module.exports = {
       whitelist: /\.css$/
     }) : undefined,
     output: {
-      libraryTarget: TARGET_NODE 
-        ? 'commonjs2' 
+      libraryTarget: TARGET_NODE
+        ? 'commonjs2'
         : undefined
     },
     optimization: {
       splitChunks: undefined
     },
-    resolve:{
+    resolve: {
       alias: {
         'create-api': createApiFile
       }
@@ -53,12 +58,12 @@ module.exports = {
   }),
   chainWebpack: config => {
     config.module
-    .rule('vue')
-    .use('vue-loader')
-    .tap(options =>
-      merge(options, {
-        optimizeSSR: false
-      })
-    )
+      .rule('vue')
+      .use('vue-loader')
+      .tap(options =>
+        merge(options, {
+          optimizeSSR: false
+        })
+      )
   }
 }

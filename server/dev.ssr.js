@@ -9,6 +9,9 @@ const Router = require('koa-router')
 const webpackConfig = require('@vue/cli-service/webpack.config')
 const { createBundleRenderer } = require("vue-server-renderer");
 
+const host = '0.0.0.0'
+const port = '3300'
+
 // 2、编译webpack配置文件
 const serverCompiler = webpack(webpackConfig)
 const mfs = new MemoryFS()
@@ -41,12 +44,10 @@ const handleRequest = async ctx => {
   if (url.includes('favicon.ico')) {
     return await send(ctx, url, { root: path.resolve(__dirname, '../public') })
   } 
-  // else if (url.includes('/sockjs-node')) {
-  //   return ctx.body = { "websocket": true, "origins": ["*:*"], "cookie_needed": false, "entropy": 819598444 }
-  // }
+
 
   // 4、获取最新的 vue-ssr-client-manifest.json
-  const clientManifestResp = await axios.get('http://localhost:8080/vue-ssr-client-manifest.json')
+  const clientManifestResp = await axios.get(`http://${host}:${port}/vue-ssr-client-manifest.json`)
   const clientManifest = clientManifestResp.data
 
   const renderer = createBundleRenderer(bundle, {
@@ -58,8 +59,13 @@ const handleRequest = async ctx => {
     title: "ssr test",
     url: ctx.url
   };
-  const html = await renderToString(context, renderer)
-  ctx.body = html;
+  try {
+    const html = await renderToString(context, renderer)
+    ctx.body = html;
+  } catch (error) {
+    // console.log(error)
+  }
+  
 }
 
 function renderToString(context, renderer) {

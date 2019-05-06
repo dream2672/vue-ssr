@@ -1,6 +1,4 @@
 import { createApp } from './main'
 
-const { app, router } = createApp()
-router.onReady(() => {
-  app.$mount('#app')
-})
+const { app } = createApp()
+app.$mount('#app')
