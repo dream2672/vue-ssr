@@ -17,20 +17,6 @@ export default context => {
       if (!matchedComponents.length) {
         return reject(new Error('no components matched'))
       }
-
-      // Promise.all(
-      //   matchedComponents.map((component: any) => {
-      //     if (component.asyncData) {
-      //       return component.asyncData({
-      //         store,
-      //         route: router.currentRoute
-      //       });
-      //     }
-      //   })
-      // ).then(() => {
-      //   context.state = store.state;
-      // });
-      // Promise 应该 resolve 应用程序实例，以便它可以渲染
       resolve(app)
     }, reject)
   })

@@ -43,6 +43,7 @@ const handleRequest = async (ctx, next) => {
   };
   // 将 context 数据渲染为 HTML
   const html = await renderToString(context);
+
   ctx.body = html;
 }
 router.get('*', handleRequest)

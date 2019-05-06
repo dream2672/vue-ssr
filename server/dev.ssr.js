@@ -52,13 +52,17 @@ const handleRequest = async ctx => {
     template: fs.readFileSync(path.resolve(__dirname, "../src/index.temp.html"), "utf-8"),
     clientManifest: clientManifest
   });
-  const html = await renderToString(ctx,renderer)
+  const context = {
+    title: "ssr test",
+    url: ctx.url
+  };
+  const html = await renderToString(context,renderer)
   ctx.body = html;
 }
 function renderToString(context,renderer) {
   return new Promise((resolve, reject) => {
     renderer.renderToString(context, (err, html) => {
-      err ? resolve(err) : resolve(html);
+      err ? reject(err) : resolve(html);
     });
   });
 }

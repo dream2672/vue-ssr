@@ -15,8 +15,9 @@ const target = TARGET_NODE
   : 'client'
 
 module.exports = {
-  publicPath: isDev ? 'http://127.0.0.1:8080' : '',
+  publicPath: isDev ? 'http://localhost:8080' : '',
   devServer: {
+    historyApiFallback:true,
     headers: {
       'Access-Control-Allow-Origin': '*'
     }
